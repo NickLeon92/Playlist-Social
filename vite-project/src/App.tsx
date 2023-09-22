@@ -1,7 +1,8 @@
 import './App.css'
-import Auth from './pages/Auth'
+import Auth from './pages/Login'
 import Home from './pages/Home'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { RequireAuth } from 'react-auth-kit'
 
 function App() {
 
@@ -12,12 +13,15 @@ function App() {
       <Router>
         <Routes>
 
-          <Route path="/" Component={Home} />
-          <Route path="/home" Component={Home} />
-          <Route path="/auth" Component={Auth} />
+          <Route path={'/'} element={
+            <RequireAuth loginPath={'/login'}>
+              <Home />
+            </RequireAuth>
+          }/>
+
+          <Route path="/login" Component={Auth} />
 
         </Routes>
-
       </Router>
 
     </>
