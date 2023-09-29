@@ -1,6 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import * as dotenv from 'dotenv';
+import mongoose, { mongo } from 'mongoose'
+import User from './User';
 import axios from 'axios';
+import { AnyAaaaRecord } from 'dns';
+const dbURI = 'mongodb://172.17.0.3:27017/playlistsDB';
 dotenv.config();
 
 /**
@@ -13,58 +17,75 @@ dotenv.config();
  *
  */
 
-export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const lambdaHandler = async (event: any) => {
     console.log(`env variables: id: ${process.env.client_id}, secret: ${process.env.client_secret}`)
+    const incomingData = JSON.parse(event.body)
+    const code = incomingData.code
+    const clientId = process.env.client_id || ''
+    const clientSecret = process.env.client_secret || ''
+    const tokenExchangeUrl = 'https://accounts.spotify.com/api/token'
     try {
-        // Retrieve the query parameters from the event object
-        const queryStringParameters = event.queryStringParameters;
-    
-        // Check if the 'code' parameter is present in the query parameters
-        if (queryStringParameters && queryStringParameters.code) {
-          // Extract the authorization code
-            const authorizationCode = queryStringParameters.code;
-    
-          // Now, 'authorizationCode' contains your authorization code
-            console.log('Authorization Code:', authorizationCode);
-    
-          // You can proceed to exchange this code for an access token or perform further processing.
-            const params = new URLSearchParams();
-            params.append('client_id', "1153431231950753982");
-            params.append('client_secret', "2iDXCifIw6WTE-oEzrPmd-DtbknDURmo");
-            params.append('grant_type', 'authorization_code');
-            params.append('code', authorizationCode);
-            params.append('redirect_uri', "http://localhost:3000/auth")
-            try {
-                const response = await axios.post('https://discord.com/api/oauth2/token',params)
 
-                // Handle the response
-                console.log(response.data);
-                return {
-                  statusCode: 200,
-                  body: JSON.stringify(response.data),
-                };
-            } catch (error) {
-                // Handle errors
-                console.error(error);
-                return {
-                    statusCode: 400,
-                    body: JSON.stringify(error),
-                  };
+        const requestData = new URLSearchParams({
+            grant_type: 'authorization_code',
+            code: code,
+            redirect_uri: 'http://localhost:5173/auth',
+        });
+
+        // Base64 encode the Client ID and Client Secret for the "Authorization" header
+        const authHeader = `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`;
+
+        // Make a POST request to exchange the authorization code for tokens
+        const spotifyRes = await axios.post(
+            tokenExchangeUrl,
+            requestData.toString(),
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    Authorization: authHeader,
+                },
             }
+        );
+
+        const { access_token, refresh_token } = spotifyRes.data;
+
+        console.log('Access Token:', access_token);
+        console.log('Refresh Token:', refresh_token);
+
+        await mongoose.connect(dbURI)
+
+        const usernameToUpdate = incomingData.username; // Replace with the username you want to update
+      
+
+        const res = await User.updateOne(
+            { username: usernameToUpdate },
+            { $set: { 'token_data': spotifyRes.data } }, // Update fields
+            { strict: false }
+        )
     
-        } else {
-          // Handle the case where the 'code' parameter is missing
-          return {
-            statusCode: 400,
-            body: JSON.stringify({ error: 'Authorization code not found in query parameters' }),
-          };
-        }
-      } catch (error) {
+        return {
+            statusCode: 200,
+            // body: JSON.stringify(spotifyRes.data),
+            body: JSON.stringify({mongoRes: res, spotifyRes: spotifyRes.data}),
+            headers: {
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*", // Allow from anywhere 
+                "Access-Control-Allow-Methods": "POST"
+            }
+        };
+    }
+    catch (error) {
         // Handle any unexpected errors
         console.error('Error:', error);
         return {
-          statusCode: 500,
-          body: JSON.stringify({ error: 'Internal server error' }),
+            statusCode: 400,
+            body: JSON.stringify(error),
+            headers: {
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*", // Allow from anywhere 
+                "Access-Control-Allow-Methods": "POST"
+            }
         };
-      }
+    }
+
 };

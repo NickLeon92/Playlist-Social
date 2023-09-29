@@ -11,7 +11,7 @@ interface Values {
     password: string;
 }
 
-function Auth() {
+function Login() {
 
     const isAuthenticated = useIsAuthenticated()
     const signOut = useSignOut()
@@ -51,7 +51,7 @@ function Auth() {
     if(!isAuthenticated()){
         return (
             
-            <div>
+            <div className="place-center w-1/2 flex flex-col ml-auto mr-auto">
                 <Formik
                     initialValues={{
                         username: '',
@@ -59,26 +59,29 @@ function Auth() {
                     }}
                     onSubmit={(
                         values: Values,
-                        { setSubmitting }: FormikHelpers<Values>
                     ) => {
-                        setTimeout(() => {
-                            console.log(values)
-                            setSubmitting(false);
-                            requestToken(values)
-                        }, 500);
+                        requestToken(values)
                     }}
                 >
-                    <Form>
-                        <label htmlFor="username">username</label>
-                        <Field id="username" name="username" type="text" placeholder="John" />
+                   
+                    <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">username</label>
+                        <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" name="username" type="text" placeholder="username" />
                         <br/>
-                        <label htmlFor="password">password</label>
-                        <Field id="password" name="password" type="password" placeholder="Doe" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">password</label>
+                        <Field className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="************" />
                         <br/>
-                        <button type="submit">Submit</button>
+                    </div>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">login</button>
                     </Form>
+
                 </Formik>
-                <button onClick={setMode}>{!newUser?('create new user'):('login with existing user')}</button>
+                <button className="text-white" onClick={setMode}>{!newUser?('create new user'):('login with existing user')}</button>
+
+            
                 {/* <form>login / sign-up</form>
                 <br />
                 <label>username</label>
@@ -112,4 +115,4 @@ function Auth() {
     }
 }
 
-export default Auth
+export default Login

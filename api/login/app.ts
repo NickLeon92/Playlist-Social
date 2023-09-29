@@ -23,6 +23,12 @@ export const lambdaHandler = async (event:any)=> {
 
   console.log(event)
 
+  const headers = {
+    "Access-Control-Allow-Headers" : "Content-Type",
+    "Access-Control-Allow-Origin": "*", // Allow from anywhere 
+    "Access-Control-Allow-Methods": "*"
+  }
+
   const userData = JSON.parse(event.body)
 
   await mongoose.connect(dbURI)
@@ -41,7 +47,8 @@ export const lambdaHandler = async (event:any)=> {
     // res.send({message: "welcome new user" , token})
     return{
       statusCode: 200,
-      body: JSON.stringify({message: "welcome new user" , token, user: {username: userData.username}})
+      body: JSON.stringify({message: "welcome new user" , token, user: {username: userData.username}}),
+      headers: headers
     }
   }else if(userData.password === mongodbRes[0].password){
     
@@ -52,13 +59,15 @@ export const lambdaHandler = async (event:any)=> {
     
     return{
       statusCode: 200,
-      body: JSON.stringify({message: "welcome back" , token, user: mongodbRes[0]})
+      body: JSON.stringify({message: "welcome back" , token, user: mongodbRes[0]}),
+      headers: headers
     }
   }else{
     // res.send({message: 'incorrect password', token: null})
     return{
       statusCode: 200,
-      body: JSON.stringify({message: "incorrect password" , token: null, user: null})
+      body: JSON.stringify({message: "incorrect password" , token: null, user: null}),
+      headers: headers
     }
   }
   

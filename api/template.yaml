@@ -14,7 +14,7 @@ Parameters:
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 10
+    Timeout: 30
     Tracing: Active
   Api:
     TracingEnabled: true
@@ -25,6 +25,16 @@ Globals:
       AllowCredentials: "'*'"
 
 Resources:
+  HelloCrudAPI:
+    Type: AWS::Serverless::Api
+    Description: "Serverless API for CRUD operations"
+    Properties:
+      Name: "api-hello-crud"
+      StageName: "Prod"
+      Cors:
+        AllowMethods: "'POST,GET,PUT,DELETE,OPTIONS'"
+        AllowOrigin: "'*'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
   AuthFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -41,8 +51,9 @@ Resources:
         Auth:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
+            RestApiId: !Ref HelloCrudAPI
             Path: /auth
-            Method: get
+            Method: post
     Metadata: # Manage esbuild properties
       BuildMethod: esbuild
       BuildProperties:
@@ -67,8 +78,38 @@ Resources:
         Auth:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
+            RestApiId: !Ref HelloCrudAPI
             Path: /login
             Method: post
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: true
+        EntryPoints:
+        - app.ts
+  SpotifyFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: spotify-api/
+      Handler: app.lambdaHandler
+      Runtime: nodejs18.x
+      Environment:
+        Variables:
+          client_id: !Ref clientId
+          client_secret: !Ref clientSecret
+      Architectures:
+      - x86_64
+      Events:
+        Auth:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            RestApiId: !Ref HelloCrudAPI
+            Path: /spotify
+            Method: post
+            RequestParameters:
+              method.request.header.Authorization: true
     Metadata: # Manage esbuild properties
       BuildMethod: esbuild
       BuildProperties:
