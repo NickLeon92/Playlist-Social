@@ -28,11 +28,11 @@ const initialState: PlaylistSongs = {
     ],
 };
   
-const songsSlice = createSlice({
+const playlistsSlice = createSlice({
     name: 'songs',
     initialState,
     reducers: {
-      addSong: (state, action: PayloadAction<Playlist>) => {
+      addPlaylist: (state, action: PayloadAction<Playlist>) => {
         state.playlists.push(action.payload);
       },
     //   removeSong: (state, action: PayloadAction<string>) => {
@@ -46,8 +46,8 @@ const songsSlice = createSlice({
     },
   });
   
-  export const { addSong } = songsSlice.actions;
-  export default songsSlice.reducer;  
+  export const { addPlaylist } = playlistsSlice.actions;
+  export default playlistsSlice.reducer;  
   
   
   
