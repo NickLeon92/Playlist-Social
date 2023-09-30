@@ -2,8 +2,14 @@ import { useEffect, useState } from "react"
 import {useAuthHeader} from 'react-auth-kit'
 import SongCard from "./SongCard"
 import axios from "axios"
+import { Song } from "../redux/slices/playlistsSlice"
 
-export default function Editor(){
+interface EditorProps {
+    playlist: Array<Song>
+    setPlaylist: React.Dispatch<React.SetStateAction<Song[]>>
+}
+
+const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
 
     const authHeader = useAuthHeader()
 
@@ -18,76 +24,20 @@ export default function Editor(){
         added: boolean
     }
 
-    const [playlist, setPlaylist] = useState<Song[]>([
-        // {
-        //     id: "xyz987",
-        //     song: "Morphine",
-        //     artists: "The Ninjas",
-        //     album: "The Ninjas",
-        //     image: "https://i.scdn.co/image/ab67616d0000485142a71cca827a8d0abda07e49",
-        //     added: true
-        // }
-    ])
+    // const [playlist, setPlaylist] = useState<Song[]>([
+
+    // ])
 
     const [results, setResults] = useState<Song[]>([
-        // {
-        //     id: "abc123",
-        //     song: "Memory Reboot",
-        //     artists: "VØJ, Narvent",
-        //     album: "Memory Reboot",
-        //     image: "https://i.scdn.co/image/ab67616d0000485142a71cca827a8d0abda07e49",
-        //     added: false
-        // },
-        // {
-        //     id: "abc12",
-        //     song: "All the small things",
-        //     artists: "Blink182",
-        //     album: "Enema",
-        //     image: "https://i.scdn.co/image/ab67616d0000485142a71cca827a8d0abda07e49",
-        //     added: false
-        // },
-        // {
-        //     id: "ac123",
-        //     song: "Simpson Wave",
-        //     artists: "idk",
-        //     album: "The Simpsons",
-        //     image: "https://i.scdn.co/image/ab67616d0000485142a71cca827a8d0abda07e49",
-        //     added: false
-        // },
-        // {
-        //     id: "abc13",
-        //     song: "Life goes on",
-        //     artists: "Oliver tree",
-        //     album: "Memory Reboot",
-        //     image: "https://i.scdn.co/image/ab67616d0000485142a71cca827a8d0abda07e49",
-        //     added: false
-        // },
-        // {
-        //     id: "c123",
-        //     song: "stellar",
-        //     artists: "one heart",
-        //     album: "Memory Reboot",
-        //     image: "https://i.scdn.co/image/ab67616d0000485142a71cca827a8d0abda07e49",
-        //     added: false
-        // },
-        // {
-        //     id: "bc123",
-        //     song: "Modern Jesus",
-        //     artists: "Portugal the man",
-        //     album: "Evil Friends",
-        //     image: "https://i.scdn.co/image/ab67616d0000485142a71cca827a8d0abda07e49",
-        //     added: false
-        // },
-        // {
-        //     id: "xyz987",
-        //     song: "Morphine",
-        //     artists: "The Ninjas",
-        //     album: "The Ninjas",
-        //     image: "https://i.scdn.co/image/ab67616d0000485142a71cca827a8d0abda07e49",
-        //     added: false
-        // }
-        // Add more initial songs as needed
-      ]);
+        {
+            id: "string",
+            song: "string",
+            artists: "string",
+            album: "string",
+            image: "string",
+            added: false
+        }
+    ]);
 
     function updateSearch(e: React.ChangeEvent<HTMLInputElement>){
         e.preventDefault()
@@ -164,3 +114,5 @@ export default function Editor(){
         </div>
     )
 }
+
+export default Editor

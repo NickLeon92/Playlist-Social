@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthUser } from 'react-auth-kit'
-import Playlist from '../components/Playlist'
+import PlaylistComponent from '../components/Playlist'
 import { v4 as uuidv4 } from 'uuid';
 import SavedPlaylist from '../components/SavedPlaylist';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/store';
+import { Playlist } from "../redux/slices/playlistsSlice"
+
 
 
 export default function Home() {
 
-    interface Playlist{
-        id: string,
-        title: string,
-        description: string
-    }
+    const reduxPlaylists = useSelector((state: RootState) => state.playlists)
 
-    const [id, setId] = useState(uuidv4())
+
+
+    const [id, setId] = useState('')
     const auth = useAuthUser()
     console.log(auth())
 
@@ -21,20 +23,15 @@ export default function Home() {
     const [isActive, setIsActive] = useState(true);
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [myPlaylists, setMyPlaylists] = useState<Playlist[]>([
-        {
-            id: 'asdf',
-            title: 'asdf',
-            description: 'asdf'
-        }
-    ])
 
     const handleClick = () => {
         setIsActive(!isActive);
-        console.log(isActive)
       };
 
     function openEditor() {
+        setId(uuidv4())
+        setDescription('')
+        setTitle('')
         if (edit) {
             setEdit(false)
         } else {
@@ -52,6 +49,10 @@ export default function Home() {
         const authorizationUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scopes}&state=${state}`;
         window.location.href = authorizationUrl
     }
+
+    useEffect(() => {
+        console.log(reduxPlaylists.playlists)
+    }, [])
 
 
     return (
@@ -89,18 +90,17 @@ export default function Home() {
                             </svg>
                             <span className="sr-only">Close menu</span>
                         </button>
-                        {myPlaylists.map((playlist) => (
+                        {reduxPlaylists.playlists.map((playlist) => (
                             //OFFCANVAS - STORES EACH PLAYLIST IN A CARD
-                            <SavedPlaylist key={playlist.id} playlist={playlist} myPlaylists={myPlaylists} setMyPlaylists={setMyPlaylists}/>
+                            <SavedPlaylist key={playlist.id} playlist={playlist} setId={setId} setTitle={setTitle} setDescription={setDescription} setEdit={setEdit}/>
                         ))}
                         
                     </div>
-                // <button className='ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>open saved playlists</button>
             ) : (<></>)}
             <br />
             {edit ? (
                 //CURRENT PLAYLIST BEING EDITTED
-                <Playlist myPlaylists={myPlaylists} id={id} title={title} description={description} edit={edit} setTitle={setTitle} setDescription={setDescription} setEdit={setEdit} setMyPlaylists={setMyPlaylists}/>
+                <PlaylistComponent id={id} title={title} description={description} edit={edit} setTitle={setTitle} setDescription={setDescription} setEdit={setEdit} />
             ) : (
                 <div>
                     <br />

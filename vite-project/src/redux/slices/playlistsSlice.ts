@@ -2,54 +2,59 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Song {
-    id: string,
-    song: string,
-    artists: string,
-    album: string,
-    image: string,
-    added: boolean
+export interface Song {
+  id: string,
+  song: string,
+  artists: string,
+  album: string,
+  image: string,
+  added: boolean
 }
 
-interface Playlist {
+export interface Playlist {
   id: string,
   title: string,
   description: string
   songs: Array<Song>
 }
 
-
-interface PlaylistSongs {
-    playlists: Playlist[];
+interface PlaylistsState {
+  playlists: Playlist[]
 }
 
-const initialState: PlaylistSongs = {
-    playlists: [
-    ],
-};
-  
+const initialState: PlaylistsState = {
+  playlists: [],
+}
+
 const playlistsSlice = createSlice({
-    name: 'songs',
-    initialState,
-    reducers: {
-      addPlaylist: (state, action: PayloadAction<Playlist>) => {
-        state.playlists.push(action.payload);
-      },
-    //   removeSong: (state, action: PayloadAction<string>) => {
-    //     // Find the index of the song by its id and remove it from the array
-    //     const index = state.songs.findIndex((song) => song.id === action.payload);
-    //     if (index !== -1) {
-    //       state.songs.splice(index, 1);
-    //     }
-    //   },
-      // Other song-related reducers
+  name: 'playlists',
+  initialState,
+  reducers: {
+    addPlaylist: (state, action: PayloadAction<Playlist>) => {
+      state.playlists.push(action.payload); // Add a new playlist to the array
     },
-  });
-  
-  export const { addPlaylist } = playlistsSlice.actions;
-  export default playlistsSlice.reducer;  
-  
-  
-  
-  
-  
+    removePlaylist: (state, action: PayloadAction<string>) => {
+      console.log('removing playlist with id: ', action.payload)
+      // console.log(JSON.parse(JSON.stringify(state)))
+      const updatedPlaylists = state.playlists.filter((el) => {
+        if (el.id !== action.payload) {
+          return el
+        }
+      })
+      state.playlists = updatedPlaylists
+    },
+    updatePlaylist: (state, action : PayloadAction<Playlist>) => {
+      const updatedPlaylists = state.playlists.map((el) => {
+        if(el.id === action.payload.id){
+          return action.payload
+        }
+        return el
+      })
+      state.playlists = updatedPlaylists
+    }
+  }
+})
+
+export const { addPlaylist, removePlaylist, updatePlaylist } = playlistsSlice.actions
+export default playlistsSlice.reducer
+// export interface Playlist

@@ -1,39 +1,49 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import React from "react";
 import Editor from "./PlaylistEditor";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/store';
+import { addPlaylist , updatePlaylist } from "../redux/slices/playlistsSlice";
+import { Song } from "../redux/slices/playlistsSlice"
+
 
 interface Playlist{
   id: string,
   title: string,
   description: string
+  songs: Array<Song>
 }
 
 
 interface PlaylistProps {
-  id: string,
-  title: string,
-  description: string,
-  edit: boolean,
-  myPlaylists: Array<Playlist>,
-  setMyPlaylists: React.Dispatch<React.SetStateAction<Playlist[]>>,
+  id: any,
+  title: any,
+  description: any,
+  edit: any,
   setEdit: React.Dispatch<React.SetStateAction<boolean>>,
   setTitle: React.Dispatch<React.SetStateAction<string>>,
   setDescription: React.Dispatch<React.SetStateAction<string>>
 }
 
-const Playlist : React.FC<PlaylistProps> = ({myPlaylists, id ,title, description, edit, setEdit,  setTitle, setDescription, setMyPlaylists}) => {
+const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setEdit,  setTitle, setDescription, }) => {
 
-  console.log(myPlaylists, title, description, edit , setEdit, setTitle, setDescription)
+  const dispatch = useDispatch()
+
+  const reduxPlaylists = useSelector((state: RootState) => state.playlists)
 
   const [showModal, setShowModal] = useState(false);
+  const [playlist, setPlaylist] = useState<Song[]>([])
 
   function savePlaylist(){
     console.log(`saving playlist with id: ${id} title: ${title}, and description: ${description}`)
-    setMyPlaylists([...myPlaylists, {
-      id: id,
-      title: title,
-      description: description
-    }])
+    // if(reduxPlaylists.playlists.some((el) => el.id === id)){
+    //   //update playlist
+    const currentPlaylist = reduxPlaylists.playlists.find((el) => el.id === id)
+    if(currentPlaylist){
+      dispatch(updatePlaylist({id, title, description, songs: playlist}))
+    }else{
+      dispatch(addPlaylist({id, title, description, songs: playlist}))
+    }
   }
 
   function titleInput(e: React.ChangeEvent<HTMLInputElement>){
@@ -43,17 +53,26 @@ const Playlist : React.FC<PlaylistProps> = ({myPlaylists, id ,title, description
     setDescription(e.target.value)
   }
 
+  useEffect(() => {
+    const currentPlaylist = reduxPlaylists.playlists.find((el) => el.id === id)
+    if(currentPlaylist){
+      setPlaylist(currentPlaylist.songs)
+    }else{
+      setPlaylist([])
+    }
+  },[id])
+
   return (
     <div>
       <br />
       <form>
       <div className="relative z-0 w-full mb-6 group">
-        <input onChange={titleInput} className="text-xl block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-        <label className="text-xl peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Title</label>
+        <input onChange={titleInput} className="text-xl block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" />
+        <label className="text-xl peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">{title === ''? ('Title'):(title)}</label>
         <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500 dark:text-gray-400">Enter a title for you playlist!</p>
 
         <br />
-        <textarea onChange={descriptionInput} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Something sad that will make me think of a life long gone, but not forgotten.."></textarea>
+        <textarea onChange={descriptionInput} id="message" rows={4} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={description === ''?("Something sad that will make me think of a life long gone, but not forgotten.."):(description)}></textarea>
         <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500 dark:text-gray-400">Enter a description!</p>
 
       </div>
@@ -77,7 +96,7 @@ const Playlist : React.FC<PlaylistProps> = ({myPlaylists, id ,title, description
 \                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
                   <div className="relative p-6 flex-auto">
-                    <Editor />
+                    <Editor playlist={playlist} setPlaylist={setPlaylist} />
                   </div>
                   <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                     <button
