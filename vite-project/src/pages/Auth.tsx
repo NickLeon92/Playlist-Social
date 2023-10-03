@@ -21,7 +21,7 @@ export default function Auth() {
             try {
                 const res = await axios({
                     method: 'POST',
-                    url:'http://127.0.0.1:3000/auth',
+                    url:'http://localhost:3000/auth',
                     data:{
                         username: auth()?.username,
                         code: code
@@ -32,6 +32,7 @@ export default function Auth() {
                     }
                 })
                 console.log(res)
+                setSuccess(true)
                 setLoading(false)
                 // navigate('/')
             } catch (error) {

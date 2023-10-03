@@ -2,6 +2,8 @@ import React, { useCallback } from 'react'
 import { Playlist } from "../redux/slices/playlistsSlice"
 import { useDispatch } from "react-redux"
 import { addPlaylist , removePlaylist } from "../redux/slices/playlistsSlice"
+import {useAuthHeader} from 'react-auth-kit'
+import axios from 'axios'
 
 interface SavedPlaylistProps {
     playlist: Playlist,
@@ -14,9 +16,22 @@ interface SavedPlaylistProps {
 const SavedPlaylist: React.FC<SavedPlaylistProps> = ({ playlist, setId, setTitle, setDescription, setEdit }) => {
 
     const dispatch = useDispatch()
-
+    const authHeader = useAuthHeader()
     function removeThisPlaylist(){
         dispatch(removePlaylist(playlist.id))
+        removeFromDB()
+        async function removeFromDB(){
+            const deleteRes = await axios({
+                method: 'post',
+                url: 'http://localhost:3000/playlist-api',
+                data: {action: 'delete' , payload: playlist.id},
+                headers:{
+                    Authorization: authHeader(),
+                    "content-type": "application/json"
+                }
+            })
+            console.log(deleteRes.data)
+        }
     }
     function openPlaylist(){
         console.log('opening playlist: ', playlist)

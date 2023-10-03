@@ -28,16 +28,7 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
 
     // ])
 
-    const [results, setResults] = useState<Song[]>([
-        {
-            id: "string",
-            song: "string",
-            artists: "string",
-            album: "string",
-            image: "string",
-            added: false
-        }
-    ]);
+    const [results, setResults] = useState<Song[]>([]);
 
     function updateSearch(e: React.ChangeEvent<HTMLInputElement>){
         e.preventDefault()

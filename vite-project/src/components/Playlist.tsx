@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
+import {useAuthHeader} from 'react-auth-kit'
 import React from "react";
 import Editor from "./PlaylistEditor";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/store';
 import { addPlaylist , updatePlaylist } from "../redux/slices/playlistsSlice";
 import { Song } from "../redux/slices/playlistsSlice"
+import axios from "axios";
 
 
 interface Playlist{
@@ -28,21 +30,47 @@ interface PlaylistProps {
 const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setEdit,  setTitle, setDescription, }) => {
 
   const dispatch = useDispatch()
+  const authHeader = useAuthHeader()
 
   const reduxPlaylists = useSelector((state: RootState) => state.playlists)
 
   const [showModal, setShowModal] = useState(false);
   const [playlist, setPlaylist] = useState<Song[]>([])
 
+  interface apiPayload{
+    action: 'create' | 'read' | 'update' | 'delete',
+    payload: {
+      title: string,
+      description: string,
+      id: string,
+      songs: Array<Song>
+    }
+  }
+
   function savePlaylist(){
+
+    async function saveToDB(payload: apiPayload){
+      const apiRes = await axios({
+        method: 'post',
+        url: 'http://localhost:3000/playlist-api',
+        data: payload,
+        headers:{
+          Authorization: authHeader(),
+          "content-type": "application/json"
+        }
+      })
+      console.log(apiRes.data)
+    }
     console.log(`saving playlist with id: ${id} title: ${title}, and description: ${description}`)
     // if(reduxPlaylists.playlists.some((el) => el.id === id)){
     //   //update playlist
     const currentPlaylist = reduxPlaylists.playlists.find((el) => el.id === id)
     if(currentPlaylist){
       dispatch(updatePlaylist({id, title, description, songs: playlist}))
+      saveToDB({action: 'update', payload:{id, title, description, songs: playlist}})
     }else{
       dispatch(addPlaylist({id, title, description, songs: playlist}))
+      saveToDB({action: 'create', payload:{id, title, description, songs: playlist}})
     }
   }
 

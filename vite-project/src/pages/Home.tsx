@@ -6,15 +6,16 @@ import SavedPlaylist from '../components/SavedPlaylist';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/store';
 import { Playlist } from "../redux/slices/playlistsSlice"
-
-
+import { setPlaylists } from "../redux/slices/playlistsSlice";
+import axios from 'axios';
+import {useAuthHeader} from 'react-auth-kit'
 
 export default function Home() {
 
     const reduxPlaylists = useSelector((state: RootState) => state.playlists)
 
-
-
+    const authHeader = useAuthHeader()
+    const dispatch = useDispatch()
     const [id, setId] = useState('')
     const auth = useAuthUser()
     console.log(auth())
@@ -52,8 +53,29 @@ export default function Home() {
 
     useEffect(() => {
         console.log(reduxPlaylists.playlists)
+        async function getMyData(){
+            const apiRes = await axios({
+                method: 'post',
+                url: 'http://localhost:3000/playlist-api',
+                data: {action: 'read'},
+                headers:{
+                    Authorization: authHeader(),
+                    "content-type": "application/json"
+                }
+            })
+            console.log(apiRes.data)
+            const savePlaylists = apiRes.data.payload.playlists.map((el : any) => {
+                return {
+                    id: el.id,
+                    title: el.title,
+                    description: el.description,
+                    songs: el.songs
+                }
+            })
+            dispatch(setPlaylists(savePlaylists))
+        }
+        getMyData()
     }, [])
-
 
     return (
         <div>

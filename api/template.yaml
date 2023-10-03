@@ -118,6 +118,35 @@ Resources:
         Sourcemap: true
         EntryPoints:
         - app.ts
+  PlaylistFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: playlist-api/
+      Handler: app.lambdaHandler
+      Runtime: nodejs18.x
+      Environment:
+        Variables:
+          client_id: !Ref clientId
+          client_secret: !Ref clientSecret
+      Architectures:
+      - x86_64
+      Events:
+        Auth:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            RestApiId: !Ref HelloCrudAPI
+            Path: /playlist-api
+            Method: post
+            RequestParameters:
+              method.request.header.Authorization: true
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: true
+        EntryPoints:
+        - app.ts
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group

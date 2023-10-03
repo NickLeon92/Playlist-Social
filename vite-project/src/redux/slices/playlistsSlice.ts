@@ -51,10 +51,13 @@ const playlistsSlice = createSlice({
         return el
       })
       state.playlists = updatedPlaylists
+    },
+    setPlaylists: (state, action: PayloadAction<Playlist[]>) => {
+      state.playlists = action.payload
     }
   }
 })
 
-export const { addPlaylist, removePlaylist, updatePlaylist } = playlistsSlice.actions
+export const { addPlaylist, removePlaylist, updatePlaylist, setPlaylists } = playlistsSlice.actions
 export default playlistsSlice.reducer
 // export interface Playlist
