@@ -18,7 +18,7 @@ export default function Home() {
     const dispatch = useDispatch()
     const [id, setId] = useState('')
     const auth = useAuthUser()
-    console.log(auth())
+    // console.log(auth())
 
     const [edit, setEdit] = useState(false)
     const [isActive, setIsActive] = useState(true);
@@ -52,6 +52,7 @@ export default function Home() {
     }
 
     useEffect(() => {
+        console.log(auth())
         console.log(reduxPlaylists.playlists)
         async function getMyData(){
             const apiRes = await axios({
@@ -59,7 +60,7 @@ export default function Home() {
                 url: 'http://localhost:3000/playlist-api',
                 data: {action: 'read'},
                 headers:{
-                    Authorization: authHeader(),
+                    "Authorization": authHeader(),
                     "content-type": "application/json"
                 }
             })

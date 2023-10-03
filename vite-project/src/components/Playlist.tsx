@@ -36,6 +36,8 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setE
 
   const [showModal, setShowModal] = useState(false);
   const [playlist, setPlaylist] = useState<Song[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   interface apiPayload{
     action: 'create' | 'read' | 'update' | 'delete',
@@ -47,30 +49,40 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setE
     }
   }
 
-  function savePlaylist(){
+  function savePlaylist() {
 
-    async function saveToDB(payload: apiPayload){
-      const apiRes = await axios({
-        method: 'post',
-        url: 'http://localhost:3000/playlist-api',
-        data: payload,
-        headers:{
-          Authorization: authHeader(),
-          "content-type": "application/json"
-        }
-      })
-      console.log(apiRes.data)
-    }
     console.log(`saving playlist with id: ${id} title: ${title}, and description: ${description}`)
     // if(reduxPlaylists.playlists.some((el) => el.id === id)){
     //   //update playlist
     const currentPlaylist = reduxPlaylists.playlists.find((el) => el.id === id)
-    if(currentPlaylist){
-      dispatch(updatePlaylist({id, title, description, songs: playlist}))
-      saveToDB({action: 'update', payload:{id, title, description, songs: playlist}})
-    }else{
-      dispatch(addPlaylist({id, title, description, songs: playlist}))
-      saveToDB({action: 'create', payload:{id, title, description, songs: playlist}})
+    if (currentPlaylist) {
+      dispatch(updatePlaylist({ id, title, description, songs: playlist }))
+      saveToDB({ action: 'update', payload: { id, title, description, songs: playlist } })
+    } else {
+      dispatch(addPlaylist({ id, title, description, songs: playlist }))
+      saveToDB({ action: 'create', payload: { id, title, description, songs: playlist } })
+    }
+
+    async function saveToDB(payload: apiPayload) {
+      setLoading(true)
+      setError(false)
+      try {
+        const apiRes = await axios({
+          method: 'post',
+          url: 'http://localhost:3000/playlist-api',
+          data: payload,
+          headers: {
+            "Authorization": authHeader(),
+            "content-type": "application/json"
+          }
+        })
+        console.log(apiRes.data)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+        setLoading(false)
+        setError(true)
+      }
     }
   }
 
@@ -105,7 +117,7 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setE
 
       </div>
     </form>
-      <button onClick={savePlaylist} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">save</button>
+      <button onClick={savePlaylist} className={!loading?("bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"):("bg-gray-500 text-white font-bold py-2 px-4 rounded")} disabled={!loading?(false):(true)}>{!loading?('save'):('saving..')}</button>
 
       <>
         <button
@@ -136,10 +148,11 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setE
                     </button>
                     <button
                       onClick={savePlaylist}
-                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      className={!loading?("bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"):("bg-gray-500 text-white font-bold py-2 px-4 rounded")}
                       type="button"
+                      disabled={!loading?(false):(true)}
                       >
-                      Save Changes
+                      {!loading?('save changes'):('saving..')}
                     </button>
                   </div>
                 </div>

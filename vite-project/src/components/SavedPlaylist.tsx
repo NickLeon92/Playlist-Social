@@ -26,7 +26,7 @@ const SavedPlaylist: React.FC<SavedPlaylistProps> = ({ playlist, setId, setTitle
                 url: 'http://localhost:3000/playlist-api',
                 data: {action: 'delete' , payload: playlist.id},
                 headers:{
-                    Authorization: authHeader(),
+                    "Authorization": authHeader(),
                     "content-type": "application/json"
                 }
             })
