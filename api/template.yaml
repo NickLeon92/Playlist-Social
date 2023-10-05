@@ -25,16 +25,16 @@ Globals:
       AllowCredentials: "'*'"
 
 Resources:
-  HelloCrudAPI:
-    Type: AWS::Serverless::Api
-    Description: "Serverless API for CRUD operations"
-    Properties:
-      Name: "api-hello-crud"
-      StageName: "Prod"
-      Cors:
-        AllowMethods: "'POST,GET,PUT,DELETE,OPTIONS'"
-        AllowOrigin: "'*'"
-        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+  # HelloCrudAPI:
+  #   Type: AWS::Serverless::Api
+  #   Description: "Serverless API for CRUD operations"
+  #   Properties:
+  #     Name: "api-hello-crud"
+  #     StageName: "Prod"
+  #     Cors:
+  #       AllowMethods: "'POST,GET,PUT,DELETE,OPTIONS'"
+  #       AllowOrigin: "'*'"
+  #       AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
   AuthFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -51,7 +51,7 @@ Resources:
         Auth:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            RestApiId: !Ref HelloCrudAPI
+            # RestApiId: !Ref HelloCrudAPI
             Path: /auth
             Method: post
     Metadata: # Manage esbuild properties
@@ -78,7 +78,7 @@ Resources:
         Auth:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            RestApiId: !Ref HelloCrudAPI
+            # RestApiId: !Ref HelloCrudAPI
             Path: /login
             Method: post
     Metadata: # Manage esbuild properties
@@ -105,7 +105,7 @@ Resources:
         Auth:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            RestApiId: !Ref HelloCrudAPI
+            # RestApiId: !Ref HelloCrudAPI
             Path: /spotify
             Method: post
             RequestParameters:
@@ -134,7 +134,7 @@ Resources:
         Auth:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            RestApiId: !Ref HelloCrudAPI
+            # RestApiId: !Ref HelloCrudAPI
             Path: /playlist-api
             Method: post
             RequestParameters:
@@ -165,12 +165,39 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  AuthApi:
+    Description: API Gateway endpoint URL for Prod stage for Auth function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/auth/"
   AuthFunction:
-    Description: Hello World Lambda Function ARN
+    Description: Auth Lambda Function ARN
     Value: !GetAtt AuthFunction.Arn
   AuthFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
+    Description: Implicit IAM Role created for Auth function
     Value: !GetAtt AuthFunctionRole.Arn
+  LoginApi:
+    Description: API Gateway endpoint URL for Prod stage for Login function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/login/"
+  LoginFunction:
+    Description: Login Lambda Function ARN
+    Value: !GetAtt LoginFunction.Arn
+  LoginFunctionIamRole:
+    Description: Implicit IAM Role created for Login function
+    Value: !GetAtt LoginFunction.Arn
+  SpotifyApi:
+    Description: API Gateway endpoint URL for Prod stage for Spotify function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/spotify/"
+  SpotifyFunction:
+    Description: Spotify Lambda Function ARN
+    Value: !GetAtt SpotifyFunction.Arn
+  SpotifyFunctionIamRole:
+    Description: Implicit IAM Role created for Spotify function
+    Value: !GetAtt SpotifyFunction.Arn
+  PlaylistApi:
+    Description: API Gateway endpoint URL for Prod stage for Playlist function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/playlist/"
+  PlaylistFunction:
+    Description: Playlist Lambda Function ARN
+    Value: !GetAtt PlaylistFunction.Arn
+  PlaylistFunctionIamRole:
+    Description: Implicit IAM Role created for Playlist function
+    Value: !GetAtt PlaylistFunction.Arn
