@@ -57,7 +57,7 @@ export default function Home() {
         async function getMyData(){
             const apiRes = await axios({
                 method: 'post',
-                url: 'http://localhost:3000/playlist-api',
+                url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/playlist-api',
                 data: {action: 'read'},
                 headers:{
                     "Authorization": authHeader(),

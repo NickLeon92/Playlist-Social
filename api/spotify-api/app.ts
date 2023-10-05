@@ -7,7 +7,7 @@ import mongoose, { mongo } from 'mongoose'
 import User from './User'
 import connectToDatabase from './db'
 const secretKey = 'my-super-secret-temp-key';
-const dbURI = 'mongodb://172.17.0.3:27017/playlistsDB'; // MongoDB server URL and database name
+const dbURI = `mongodb+srv://${process.env.mongodb_user}:${process.env.mongodb_password}@cluster0.bm4b2.mongodb.net/playlistDB?retryWrites=true`; // MongoDB server URL and database name
 
 dotenv.config();
 

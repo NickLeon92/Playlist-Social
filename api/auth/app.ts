@@ -2,9 +2,10 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import * as dotenv from 'dotenv';
 import mongoose, { mongo } from 'mongoose'
 import User from './User';
+import connectToDatabase from './db'
 import axios from 'axios';
 import { AnyAaaaRecord } from 'dns';
-const dbURI = 'mongodb://172.17.0.3:27017/playlistsDB';
+const dbURI = `mongodb+srv://${process.env.mongodb_user}:${process.env.mongodb_password}@cluster0.bm4b2.mongodb.net/playlistDB?retryWrites=true`; // MongoDB server URL and database name
 dotenv.config();
 
 /**
@@ -52,7 +53,7 @@ export const lambdaHandler = async (event: any) => {
         console.log('Access Token:', access_token);
         console.log('Refresh Token:', refresh_token);
 
-        await mongoose.connect(dbURI)
+        await connectToDatabase(dbURI)
 
         const usernameToUpdate = incomingData.username; // Replace with the username you want to update
       

@@ -21,7 +21,7 @@ export default function Auth() {
             try {
                 const res = await axios({
                     method: 'POST',
-                    url:'http://localhost:3000/auth',
+                    url:' https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/auth',
                     data:{
                         username: auth()?.username,
                         code: code

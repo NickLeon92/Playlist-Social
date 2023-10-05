@@ -8,7 +8,7 @@ import User from './Models/User'
 import Playlist from './Models/Playlists';
 import connectToDatabase from './db'
 const secretKey = 'my-super-secret-temp-key';
-const dbURI = 'mongodb://172.17.0.3:27017/playlistsDB'; // MongoDB server URL and database name
+const dbURI = `mongodb+srv://${process.env.mongodb_user}:${process.env.mongodb_password}@cluster0.bm4b2.mongodb.net/playlistDB?retryWrites=true`; // MongoDB server URL and database name
 
 dotenv.config();
 
@@ -49,7 +49,7 @@ export const lambdaHandler = async (event:any)=> {
 
       console.log('creating playlist..')
 
-      const playlistRes = await Playlist.create({
+      const newPlaylist = new Playlist({
         id: eventData.payload.id,
         author: data.username,
         title: eventData.payload.title,
@@ -57,6 +57,10 @@ export const lambdaHandler = async (event:any)=> {
         songs: eventData.payload.songs
       })
 
+      const playlistRes = await newPlaylist.save({w:'majority'})
+
+      console.log(playlistRes)
+        
       const updateUser = await User.findOneAndUpdate(
         { username: data.username},
         { $push: { playlists: playlistRes._id } },

@@ -32,7 +32,7 @@ function Login() {
     async function requestToken(userData:any){
         const tokenRes = await axios({
             method: 'post',
-            url: 'http://localhost:3000/login',
+            url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/login',
             data: userData
         })
         console.log(tokenRes.data)

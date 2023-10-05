@@ -69,7 +69,7 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setE
       try {
         const apiRes = await axios({
           method: 'post',
-          url: 'http://localhost:3000/playlist-api',
+          url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/playlist-api',
           data: payload,
           headers: {
             "Authorization": authHeader(),
