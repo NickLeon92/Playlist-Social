@@ -1,4 +1,4 @@
-import {useAuthUser, useSignOut} from 'react-auth-kit'
+import { useSignOut} from 'react-auth-kit'
 
 export default function Navbar() {
     const signOut = useSignOut()

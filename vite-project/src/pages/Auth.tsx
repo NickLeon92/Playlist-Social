@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
 import { useLocation } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
 import {useAuthUser} from 'react-auth-kit'
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Auth() {
     const auth = useAuthUser()
-    const navigate = useNavigate()
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get('code')

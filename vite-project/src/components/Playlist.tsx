@@ -27,7 +27,7 @@ interface PlaylistProps {
   setDescription: React.Dispatch<React.SetStateAction<string>>
 }
 
-const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setEdit,  setTitle, setDescription, }) => {
+const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, setTitle, setDescription, }) => {
 
   const dispatch = useDispatch()
   const authHeader = useAuthHeader()
@@ -104,6 +104,7 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, edit, setE
 
   return (
     <div>
+      {error?(<p>an error occured while saving</p>):(<></>)}
       <br />
       <form>
       <div className="relative z-0 w-full mb-6 group">

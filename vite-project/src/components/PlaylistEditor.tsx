@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {useAuthHeader} from 'react-auth-kit'
 import SongCard from "./SongCard"
 import axios from "axios"

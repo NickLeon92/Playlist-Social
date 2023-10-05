@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import SavedPlaylist from '../components/SavedPlaylist';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/store';
-import { Playlist } from "../redux/slices/playlistsSlice"
 import { setPlaylists } from "../redux/slices/playlistsSlice";
 import axios from 'axios';
 import {useAuthHeader} from 'react-auth-kit'

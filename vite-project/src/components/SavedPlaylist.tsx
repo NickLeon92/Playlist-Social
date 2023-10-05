@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Playlist } from "../redux/slices/playlistsSlice"
 import { useDispatch } from "react-redux"
-import { addPlaylist , removePlaylist } from "../redux/slices/playlistsSlice"
+import { removePlaylist } from "../redux/slices/playlistsSlice"
 import {useAuthHeader} from 'react-auth-kit'
 import axios from 'axios'
 
