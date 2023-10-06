@@ -1,4 +1,6 @@
 import React, { useEffect , useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setTrack } from '../redux/slices/trackSlice';
 
 interface Song {
     id: string,
@@ -19,6 +21,7 @@ interface SongCardProps {
 const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  setPlaylist }) => {
 
     const [inPlayist, setInPlaylist] = useState(false)
+    const dispatch = useDispatch()
 
     function addSong(){
         console.log('adding song: ', song.song)
@@ -41,6 +44,11 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
             }
         })
         setPlaylist(updatedPlaylist)
+    }
+
+    function playSong(){
+        console.log(song.id)
+        dispatch(setTrack(song.id))
     }
 
     useEffect(() => {
@@ -96,6 +104,11 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
                             Remove
                         </button>
                     )}
+                    <button
+                        onClick={playSong}
+                        className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-3 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150">
+                        play
+                    </button>
 
                 </div>
             </div>
