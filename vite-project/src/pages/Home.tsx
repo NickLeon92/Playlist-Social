@@ -42,7 +42,7 @@ export default function Home() {
     function spotify() {
         console.log('logging into spotify..')
         const clientId = '4b64cb148f49424a93854e6a8e955394';
-        const redirectUri = 'http://localhost:5173/auth';
+        const redirectUri = 'https://preprod--playlistener.netlify.app/auth';
         const scopes = 'user-read-private'; // Modify as needed
         const state = 'randomly-generated-string'; // Optional but recommended for security
 
@@ -81,11 +81,11 @@ export default function Home() {
         <div>
             <h1 className="text-3xl text-sky-600">{auth()?.message}, {auth()?.username}!</h1>
             <br />
-            <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={openEditor}>
+            <button className='mr-4 mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={openEditor}>
                 {!edit ? ('create a playlist') : ('close editor')}
             </button>
             {!edit?(
-            <button onClick={handleClick} className='ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
+            <button onClick={handleClick} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
                 open saved playlist
             </button>
 
@@ -126,7 +126,7 @@ export default function Home() {
             ) : (
                 <div>
                     <br />
-                    <p className='text-sky-200'>click above to get started</p>
+                    <p className='text-sky-200'>authorize spotify and start creating playlists </p>
                 </div>
             )}
             <br />
@@ -134,7 +134,11 @@ export default function Home() {
 
             <br />
             <br />
-            <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={() => spotify()} >log in to spotify</button>
+            <button className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onClick={() => spotify()} >
+                authorize spotify
+                <span></span>
+                <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2931 2931" width="29" height="29"><path className="st0 ml-2" d="M1465.5 0C656.1 0 0 656.1 0 1465.5S656.1 2931 1465.5 2931 2931 2274.9 2931 1465.5C2931 656.2 2274.9.1 1465.5 0zm672.1 2113.6c-26.3 43.2-82.6 56.7-125.6 30.4-344.1-210.3-777.3-257.8-1287.4-141.3-49.2 11.3-98.2-19.5-109.4-68.7-11.3-49.2 19.4-98.2 68.7-109.4C1242.1 1697.1 1721 1752 2107.3 1988c43 26.5 56.7 82.6 30.3 125.6zm179.3-398.9c-33.1 53.8-103.5 70.6-157.2 37.6-393.8-242.1-994.4-312.2-1460.3-170.8-60.4 18.3-124.2-15.8-142.6-76.1-18.2-60.4 15.9-124.1 76.2-142.5 532.2-161.5 1193.9-83.3 1646.2 194.7 53.8 33.1 70.8 103.4 37.7 157.1zm15.4-415.6c-472.4-280.5-1251.6-306.3-1702.6-169.5-72.4 22-149-18.9-170.9-91.3-21.9-72.4 18.9-149 91.4-171 517.7-157.1 1378.2-126.8 1922 196 65.1 38.7 86.5 122.8 47.9 187.8-38.5 65.2-122.8 86.7-187.8 48z"/></svg>
+                </button>
 
         </div>
     )

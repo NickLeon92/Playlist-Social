@@ -30,7 +30,7 @@ export const lambdaHandler = async (event: any) => {
         const requestData = new URLSearchParams({
             grant_type: 'authorization_code',
             code: code,
-            redirect_uri: 'http://localhost:5173/auth',
+            redirect_uri: 'https://preprod--playlistener.netlify.app/auth',
         });
 
         // Base64 encode the Client ID and Client Secret for the "Authorization" header
