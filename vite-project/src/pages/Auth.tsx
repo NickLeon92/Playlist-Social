@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
 import { useLocation } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
 import {useAuthUser} from 'react-auth-kit'
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Auth() {
     const auth = useAuthUser()
-    const navigate = useNavigate()
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get('code')
@@ -21,7 +19,7 @@ export default function Auth() {
             try {
                 const res = await axios({
                     method: 'POST',
-                    url:'http://localhost:3000/auth',
+                    url:' https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/auth',
                     data:{
                         username: auth()?.username,
                         code: code

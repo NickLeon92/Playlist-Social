@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Playlist } from "../redux/slices/playlistsSlice"
 import { useDispatch } from "react-redux"
-import { addPlaylist , removePlaylist } from "../redux/slices/playlistsSlice"
+import { removePlaylist } from "../redux/slices/playlistsSlice"
 import {useAuthHeader} from 'react-auth-kit'
 import axios from 'axios'
 
@@ -23,7 +23,7 @@ const SavedPlaylist: React.FC<SavedPlaylistProps> = ({ playlist, setId, setTitle
         async function removeFromDB(){
             const deleteRes = await axios({
                 method: 'post',
-                url: 'http://localhost:3000/playlist-api',
+                url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/playlist-api',
                 data: {action: 'delete' , payload: playlist.id},
                 headers:{
                     "Authorization": authHeader(),

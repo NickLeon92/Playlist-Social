@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {useAuthHeader} from 'react-auth-kit'
 import SongCard from "./SongCard"
 import axios from "axios"
@@ -52,7 +52,7 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
             setLoading(true)
             const spotifyRes = await axios({
                 method: 'POST',
-                url: 'http://localhost:3000/spotify',
+                url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/spotify',
                 data: { search },
                 headers: {
                     "Authorization": authHeader(),

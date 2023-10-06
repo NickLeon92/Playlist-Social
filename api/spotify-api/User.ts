@@ -14,7 +14,13 @@ const userSchema = new Schema({
     },
     token_data : {
         type: Object
-    }
+    },
+    playlists: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Playlist'
+        }
+    ]
 });
 
 const User = mongoose.model('User', userSchema);
