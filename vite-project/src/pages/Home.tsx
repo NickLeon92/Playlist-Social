@@ -14,7 +14,7 @@ import Player from '../components/Player';
 export default function Home() {
 
     const reduxPlaylists = useSelector((state: RootState) => state.playlists)
-    const track = useSelector((state: RootState) => state.track).track
+    // const track = useSelector((state: RootState) => state.track).track
 
     const authHeader = useAuthHeader()
     const dispatch = useDispatch()
