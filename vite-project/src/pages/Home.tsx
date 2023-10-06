@@ -42,7 +42,7 @@ export default function Home() {
     function spotify() {
         console.log('logging into spotify..')
         const clientId = '4b64cb148f49424a93854e6a8e955394';
-        const redirectUri = 'http://localhost:5173/auth';
+        const redirectUri = 'https://preprod--playlistener.netlify.app/auth';
         const scopes = 'user-read-private'; // Modify as needed
         const state = 'randomly-generated-string'; // Optional but recommended for security
 
