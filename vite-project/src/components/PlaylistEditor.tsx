@@ -89,12 +89,12 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
 
     return(
         <div>
-
-
+            <div className="overflow-auto maxh-64">
 
             {playlist.map((song) => (
                         <SongCard key={song.id} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
                     ))}
+            </div>
             <br/>
             <form className="w-full max-w-sm ml-auto mr-auto">
                 <div className="flex items-center border-b border-teal-500 py-2">
