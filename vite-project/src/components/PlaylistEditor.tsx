@@ -89,7 +89,7 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
 
     return(
         <div>
-            <div className="overflow-auto maxh-64">
+            <div className="overflow-auto max-h-64">
 
             {playlist.map((song) => (
                         <SongCard key={song.id} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
