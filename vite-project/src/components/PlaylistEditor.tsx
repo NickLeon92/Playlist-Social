@@ -17,14 +17,14 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
 
-    interface Song {
-        id: string,
-        song: string,
-        artists: string,
-        album: string,
-        image: string,
-        added: boolean
-    }
+    // interface Song {
+    //     id: string,
+    //     song: string,
+    //     artists: string,
+    //     album: string,
+    //     image: string,
+    //     added: boolean
+    // }
 
     // const [playlist, setPlaylist] = useState<Song[]>([
 

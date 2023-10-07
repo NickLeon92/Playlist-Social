@@ -10,7 +10,7 @@ export default function Player(){
 
     const trackUri = `spotify:track:${track}`
 
-    console.log('token: ', accessToken, ' track: ' , track)
+    // console.log('token: ', accessToken, ' track: ' , track)
 
     const [play, setPlay] = useState(false)
 

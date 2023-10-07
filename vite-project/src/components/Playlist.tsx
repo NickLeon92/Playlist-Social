@@ -52,6 +52,8 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, setTitle, 
   function savePlaylist() {
 
     console.log(`saving playlist with id: ${id} title: ${title}, and description: ${description}`)
+    console.log('sending songs:')
+    console.log(playlist)
     // if(reduxPlaylists.playlists.some((el) => el.id === id)){
     //   //update playlist
     const currentPlaylist = reduxPlaylists.playlists.find((el) => el.id === id)
