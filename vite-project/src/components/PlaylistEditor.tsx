@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import {useAuthHeader} from 'react-auth-kit'
 import SongCard from "./SongCard"
 import axios from "axios"
@@ -88,13 +88,25 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
         }
     }
 
+    const playlistDivRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    console.log('detecting change or loading of playlist')
+    // scrollToBottom()
+    const domNode = playlistDivRef.current;
+      if (domNode) {
+         domNode.scrollTop = domNode.scrollHeight;
+      }
+  },[playlist]);
+
     return(
         <div>
-            <div className="overflow-auto max-h-64">
+            <div ref={playlistDivRef} className="overflow-auto max-h-64">
 
             {playlist.map((song) => (
                         <SongCard key={song.songId} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
                     ))}
+                    <div  />
             </div>
             <br/>
             <form className="w-full max-w-sm ml-auto mr-auto">
