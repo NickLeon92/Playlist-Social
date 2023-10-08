@@ -68,7 +68,7 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
 
         <div className="max-w-sm w-full lg:max-w-full lg:flex-wrap">
 
-            <div className="border-r border-b border-t border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b rounded-t lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+            <div className="border-r border-b border-t border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b rounded-t lg:rounded-b-none lg:rounded-r p-2 flex flex-col justify-between leading-normal">
 
                 <div className="flex items-center justify-between">
                     <div className='flex wrap items-center truncate'>
@@ -103,7 +103,7 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
 
                         ):(
                             <button 
-                                className="bg-red-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-3 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150"
+                                className="bg-red-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150"
                                 onClick={removeSong}
                                 >
                                 Remove
@@ -111,7 +111,7 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
                         )}
                         <button
                             onClick={playSong}
-                            className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-3 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150">
+                            className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150">
                             play
                         </button>
                         
