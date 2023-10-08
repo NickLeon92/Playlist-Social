@@ -8,7 +8,8 @@ export interface Song {
   artists: string,
   album: string,
   image: string,
-  added: boolean
+  added: boolean,
+  songId: string
 }
 
 export interface Playlist {

@@ -77,6 +77,8 @@ export const lambdaHandler = async (event:any)=> {
       payload = userRes
     }
     else if(eventData.action === 'update'){
+      console.log('updating with these songs:')
+      console.log(eventData.payload.songgs)
       const playlistToUpdate = await Playlist.findOne({id: eventData.payload.id})
       if(!playlistToUpdate){
         return

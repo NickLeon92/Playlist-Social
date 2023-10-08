@@ -75,7 +75,8 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
                     artists: getArtists(),
                     album: song.album.name,
                     image: song.album.images[2].url,
-                    added: false
+                    added: false,
+                    songId: song.id
                 }
             })
             setResults(reducedData)
@@ -92,7 +93,7 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
             <div className="overflow-auto max-h-64">
 
             {playlist.map((song) => (
-                        <SongCard key={song.id} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
+                        <SongCard key={song.songId} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
                     ))}
             </div>
             <br/>
@@ -128,7 +129,7 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
             {results.length > 0? (
                 <div className="overflow-auto h-64">
                     {results.map((song) => (
-                        <SongCard key={song.id} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
+                        <SongCard key={song.songId} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
                     ))}
                 </div>
             ): (<></>)}

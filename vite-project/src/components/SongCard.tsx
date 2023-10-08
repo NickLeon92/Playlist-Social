@@ -41,7 +41,7 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
     function removeSong(){
         console.log('removing song: ', song.song)
         const updatedPlaylist = playlist.filter((el) => {
-            if(el.id !== song.id){
+            if(el.songId !== song.songId){
                 return el
             }
         })
@@ -49,13 +49,13 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
     }
 
     function playSong(){
-        console.log(song.id)
-        dispatch(setTrack(song.id))
+        console.log(song.songId)
+        dispatch(setTrack(song.songId))
     }
 
     useEffect(() => {
 
-        const inArray = playlist.some((el) => el.id === song.id)
+        const inArray = playlist.some((el) => el.songId === song.songId)
         if(inArray){
             setInPlaylist(true)
         }else{
@@ -78,7 +78,6 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
                         <div className="text-gray-900 font-bold text-l mb-2">{song.song}</div>
                         <p className="text-gray-900 leading-none">{song.artists}</p>
                         <p className="text-gray-600">{song.album}</p>
-                        <p className="">id: {song.id}</p>
                     </div>
                     </div>
                     <div className='flex flex-col'>
