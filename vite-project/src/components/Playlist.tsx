@@ -36,6 +36,7 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, setTitle, 
   const reduxPlaylists = useSelector((state: RootState) => state.playlists)
 
   const [showModal, setShowModal] = useState(false);
+  const [showSongsModal, setShowSongsModal] = useState(false)
   const [playlist, setPlaylist] = useState<Song[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -154,6 +155,11 @@ const playlistDivRef = useRef<HTMLDivElement | null>(null);
         >
           add songs
         </button>
+        <button
+          className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => setShowSongsModal(true)}
+        > view
+        </button>
         {showModal ? (
           <>
             <div
@@ -182,6 +188,38 @@ const playlistDivRef = useRef<HTMLDivElement | null>(null);
                       {!loading?('save changes'):('saving..')}
                     </button>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </>
+        ) : null}
+        {showSongsModal ? (
+          <>
+            <div
+              className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+            >
+              <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                  
+                  <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                  <div ref={playlistDivRef} 
+      className="overflow-auto max-h-[34rem]"
+      >
+
+            {playlist.map((song) => (
+                        <SongCard key={song.songId} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
+                    ))}
+                    <div  />
+            </div>
+                  </div>
+                    <button
+                      className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={() => setShowSongsModal(false)}
+                    >
+                      Close
+                    </button>
                 </div>
               </div>
             </div>
