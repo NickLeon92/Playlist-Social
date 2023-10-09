@@ -83,7 +83,7 @@ export default function Home() {
 
     return (
         <div>
-            <h1 className="text-3xl text-sky-600">{auth()?.message}, {auth()?.username}!</h1>
+            <h1 className="text-3xl text-sky-600">{!edit?(`${auth()?.message}, ${auth()?.username}!`):('')}</h1>
             <br />
             <button className='mr-4 mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={openEditor}>
                 {!edit ? ('create a playlist') : ('close editor')}
@@ -123,7 +123,7 @@ export default function Home() {
                         
                     </div>
             ) : (<></>)}
-            <br />
+            {/* <br /> */}
             {edit ? (
                 //CURRENT PLAYLIST BEING EDITTED
                 <PlaylistComponent id={id} title={title} description={description} edit={edit} setTitle={setTitle} setDescription={setDescription} setEdit={setEdit} />
@@ -133,10 +133,10 @@ export default function Home() {
                     <p className='text-sky-200'>authorize spotify and start creating playlists </p>
                 </div>
             )}
-            <br />
+            {/* <br />
             <br />
 
-            <br />
+            <br /> */}
             <br />
             <button className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onClick={() => spotify()} >
                 authorize spotify

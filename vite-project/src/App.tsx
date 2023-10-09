@@ -16,7 +16,7 @@ function App() {
 
       <Router>
         <Navbar />
-        <div className='pt-16'>
+        <div className='pt-12'>
 
         <Routes>
 

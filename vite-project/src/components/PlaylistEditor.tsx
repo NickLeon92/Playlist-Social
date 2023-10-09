@@ -101,14 +101,14 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
 
     return(
         <div>
-            <div ref={playlistDivRef} className="overflow-auto max-h-64">
+            {/* <div ref={playlistDivRef} className="overflow-auto max-h-64">
 
             {playlist.map((song) => (
                         <SongCard key={song.songId} song={song} playlist={playlist} searchResults={results} setPlaylist={setPlaylist}/>
                     ))}
                     <div  />
-            </div>
-            <br/>
+            </div> */}
+            {/* <br/> */}
             <form className="w-full max-w-sm ml-auto mr-auto">
                 <div className="flex items-center border-b border-teal-500 py-2">
                     <input onKeyDown={enterKey} onChange={updateSearch}  className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Memory Reboot" aria-label="Full name" />
