@@ -74,7 +74,8 @@ export default function Home() {
                     id: el.id,
                     title: el.title,
                     description: el.description,
-                    songs: el.songs
+                    songs: el.songs,
+                    suggestedSongs: el.suggestedSongs
                 }
             })
             dispatch(setPlaylists(savePlaylists))

@@ -17,6 +17,7 @@ export interface Playlist {
   title: string,
   description: string
   songs: Array<Song>
+  suggestedSongs: Array<Song>
 }
 
 interface PlaylistsState {

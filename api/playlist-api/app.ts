@@ -84,7 +84,7 @@ export const lambdaHandler = async (event:any)=> {
     }
     else if(eventData.action === 'update'){
       console.log('updating with these songs:')
-      console.log(eventData.payload.songgs)
+      // console.log(eventData.payload.songgs)
       const playlistToUpdate = await Playlist.findOne({id: eventData.payload.id})
       if(!playlistToUpdate){
         return
@@ -93,6 +93,15 @@ export const lambdaHandler = async (event:any)=> {
       playlistToUpdate.title = eventData.payload.title
       playlistToUpdate.description = eventData.payload.description
       playlistToUpdate.songs = eventData.payload.songs
+      await playlistToUpdate.save()
+    }
+    else if(eventData.action === 'update-suggestions'){
+      const playlistToUpdate = await Playlist.findOne({id: eventData.payload.id})
+      if(!playlistToUpdate){
+        return
+      }
+      const suggestedSongs = playlistToUpdate.suggestedSongs
+      playlistToUpdate.suggestedSongs = [...eventData.payload.suggestedSongs, ...suggestedSongs]
       await playlistToUpdate.save()
     }
     else if(eventData.action === 'delete'){
@@ -105,6 +114,13 @@ export const lambdaHandler = async (event:any)=> {
         {$pull: {playlists: playlistToDelete._id}}
       )
       payload = {playlistToDelete, updatedUser}
+    }
+    else if(eventData.action === 'delete-suggestions'){
+      const updatedPlaylist = await Playlist.findOneAndUpdate(
+        {id: eventData.payload},
+        {$set: {suggestedSongs: []}}
+      )
+      payload = {updatedPlaylist}
     }
 
     return {
