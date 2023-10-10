@@ -70,11 +70,17 @@ export const lambdaHandler = async (event:any)=> {
       payload = playlistRes
     }
     else if(eventData.action === 'read'){
-      console.log('fetching user data..')
-      const userRes = await User.findOne({
-        username: data.username
-      }).populate('playlists')
-      payload = userRes
+      if(eventData.payload === 'users'){
+        console.log('fetching user data..')
+        const userRes = await User.findOne({
+          username: data.username
+        }).populate('playlists')
+        payload = userRes
+      }else if(eventData.payload === 'playlists'){
+        console.log('fetching playlists..')
+        const playlistRes = await Playlist.find()
+        payload = playlistRes
+      }
     }
     else if(eventData.action === 'update'){
       console.log('updating with these songs:')

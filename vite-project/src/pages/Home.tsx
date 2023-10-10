@@ -10,12 +10,14 @@ import { setToken } from '../redux/slices/tokenSlice';
 import axios from 'axios';
 import {useAuthHeader} from 'react-auth-kit'
 import Player from '../components/Player';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
 
     const reduxPlaylists = useSelector((state: RootState) => state.playlists)
     // const track = useSelector((state: RootState) => state.track).track
 
+    const navigate = useNavigate()
     const authHeader = useAuthHeader()
     const dispatch = useDispatch()
     const [id, setId] = useState('')
@@ -60,7 +62,7 @@ export default function Home() {
             const apiRes = await axios({
                 method: 'post',
                 url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/playlist-api',
-                data: {action: 'read'},
+                data: {action: 'read', payload:'users'},
                 headers:{
                     "Authorization": authHeader(),
                     "content-type": "application/json"
@@ -89,14 +91,16 @@ export default function Home() {
                 {!edit ? ('create a playlist') : ('close editor')}
             </button>
             {!edit?(
-            <button onClick={handleClick} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
+            <button onClick={handleClick} className='mr-4 mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
                 open saved playlist
             </button>
 
             ):(
                 <></>
             )}
-
+            <button onClick={() => navigate('/explore')} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
+                explore playlists!
+            </button>
             {!edit ? (
                     <div 
                         id="drawer-right-example" 
