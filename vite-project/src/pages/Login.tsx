@@ -51,7 +51,7 @@ function Login() {
     if(!isAuthenticated()){
         return (
             
-            <div className="place-center w-1/2 flex flex-col ml-auto mr-auto">
+            <div className="place-center w-2/3 flex flex-col ml-auto mr-auto">
                 <Formik
                     initialValues={{
                         username: '',

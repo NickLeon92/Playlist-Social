@@ -4,12 +4,12 @@ import SongCard from "./SongCard"
 import axios from "axios"
 import { Song } from "../redux/slices/playlistsSlice"
 
-interface EditorProps {
+interface ExplorerEditorProps {
     playlist: Array<Song>
     setPlaylist: React.Dispatch<React.SetStateAction<Song[]>>
 }
 
-const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
+const ExplorerEditor: React.FC<ExplorerEditorProps> = ({ playlist , setPlaylist }) => {
 
     const authHeader = useAuthHeader()
 
@@ -156,4 +156,4 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
     )
 }
 
-export default Editor
+export default ExplorerEditor

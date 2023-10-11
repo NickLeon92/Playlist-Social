@@ -27,7 +27,19 @@ const playlistSchema = new Schema({
             artists: String,
             album: String,
             image: String,
-            added: Boolean
+            added: Boolean,
+            songId: String
+        }
+    ],
+    suggestedSongs: [
+        {
+            id: String,
+            song: String,
+            artists: String,
+            album: String,
+            image: String,
+            added: Boolean,
+            songId: String
         }
     ]
 });

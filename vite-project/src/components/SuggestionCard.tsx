@@ -15,11 +15,11 @@ import { Song } from '../redux/slices/playlistsSlice';
 interface SongCardProps {
     song: Song;
     playlist: Array<Song>
-    searchResults: Array<Song>
+    suggestions: Array<Song>
     setPlaylist: React.Dispatch<React.SetStateAction<Song[]>>
 }
 
-const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  setPlaylist }) => {
+const SuggestionCard: React.FC<SongCardProps> = ({ song , playlist , suggestions,  setPlaylist }) => {
 
     const [inPlayist, setInPlaylist] = useState(false)
     const dispatch = useDispatch()
@@ -38,16 +38,6 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
         setPlaylist(updatedPlaylist)
     }
 
-    function removeSong(){
-        console.log('removing song: ', song.song)
-        const updatedPlaylist = playlist.filter((el) => {
-            if(el.songId !== song.songId){
-                return el
-            }
-        })
-        setPlaylist(updatedPlaylist)
-    }
-
     function playSong(){
         console.log(song.songId)
         dispatch(setTrack(song.songId))
@@ -62,7 +52,7 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
             setInPlaylist(false)
         }
 
-    },[playlist,searchResults])
+    },[playlist,suggestions])
 
     return (
 
@@ -81,34 +71,15 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
                     </div>
                     </div>
                     <div className='flex flex-col'>
-                        {!song.added? (
 
-                            inPlayist?(
-                            <button 
-                                className="bg-gray-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-3 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150"
-                                onClick={addSong}
-                                disabled
-                                >
-                                Added
-                            </button>
-
-                            ):(
-                                <button 
-                                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-3 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150"
-                                onClick={addSong}
-                                >
-                                Add
-                            </button>
-                            )
-
-                        ):(
-                            <button 
-                                className="bg-red-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150"
-                                onClick={removeSong}
-                                >
-                                Remove
-                            </button>
-                        )}
+                        <button
+                            onClick={addSong}
+                            className={!inPlayist?("bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150"):("bg-grey-500 text-white active:bg-gray-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150")}
+                            disabled={!inPlayist?(false):(true)}
+                        >
+                            {!inPlayist?('Add'):('Added')}
+                        </button>
+                        
                         <button
                             onClick={playSong}
                             className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150">
@@ -124,4 +95,4 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
     );
 };
 
-export default SongCard;
+export default SuggestionCard;
