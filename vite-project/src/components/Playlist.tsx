@@ -9,6 +9,7 @@ import { Song } from "../redux/slices/playlistsSlice"
 import axios from "axios";
 import SongCard from "./SongCard";
 import SuggestionCard from "./SuggestionCard";
+import ErrorCard from "./ErrorCard";
 
 
 interface Playlist{
@@ -43,6 +44,7 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, setTitle, 
   const [suggestedSongs, setSuggestedSongs] = useState<Song[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('unknown error')
 
   interface apiPayload{
     action: 'create' | 'read' | 'update' | 'delete',
@@ -85,10 +87,19 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, setTitle, 
         })
         console.log(apiRes.data)
         setLoading(false)
-      } catch (error) {
+      } catch (error : any) {
         console.log(error)
+        // console.log(error.request)
         setLoading(false)
         setError(true)
+        if(error.response?.data){
+          if(error.response.data){
+            setErrorMessage(error.response.data.message)
+          }
+        }else if(error.message){
+          setErrorMessage(error.message)
+        }
+        // setTimeout(() => setError(false),5000)
       }
     }
   }
@@ -133,8 +144,8 @@ const Playlist : React.FC<PlaylistProps> = ({ id ,title, description, setTitle, 
       setSuggestedSongs([])
     }
   },[id])
-let results : Array<Song> = []
-const playlistDivRef = useRef<HTMLDivElement | null>(null);
+  let results : Array<Song> = []
+  const playlistDivRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     console.log('detecting change or loading of playlist')
@@ -146,7 +157,7 @@ const playlistDivRef = useRef<HTMLDivElement | null>(null);
   },[playlist]);
   return (
     <div>
-      {error?(<p>an error occured while saving</p>):(<></>)}
+      {error?(<ErrorCard setError={setError} errorMessage={errorMessage}/>):(<></>)}
       {/* <br /> */}
       <form>
       <div className="relative z-0 w-full mb-6 group flex align center">
@@ -224,6 +235,7 @@ const playlistDivRef = useRef<HTMLDivElement | null>(null);
                       {!loading?('save changes'):('saving..')}
                     </button>
                   </div>
+                  {error?(<ErrorCard setError={setError} errorMessage={errorMessage}/>):(<></>)}
                 </div>
               </div>
             </div>
