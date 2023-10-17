@@ -6,7 +6,7 @@ import SavedPlaylist from '../components/SavedPlaylist';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/store';
 import { setPlaylists } from "../redux/slices/playlistsSlice";
-import { setToken } from '../redux/slices/tokenSlice';
+import { setToken, setRefresh, setExpiration } from '../redux/slices/tokenSlice';
 import axios from 'axios';
 import {useAuthHeader} from 'react-auth-kit'
 import Player from '../components/Player';
@@ -28,6 +28,7 @@ export default function Home() {
     const [isActive, setIsActive] = useState(true);
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
+    const [player , setPlayer] = useState(false)
 
     const handleClick = () => {
         setIsActive(!isActive);
@@ -80,6 +81,9 @@ export default function Home() {
             })
             dispatch(setPlaylists(savePlaylists))
             dispatch(setToken(apiRes.data.payload.token_data.access_token))
+            dispatch(setRefresh(apiRes.data.payload.token_data.refresh_token))
+            dispatch(setExpiration(apiRes.data.payload.token_data.expTime))
+            setPlayer(true)
         }
         getMyData()
     }, [])
@@ -151,7 +155,7 @@ export default function Home() {
             {/* <button className='px-4 py-2 bg-green-500 text-white rounded' onClick={()=>{console.log(track); console.log(reduxPlaylists.playlists)}}>
                 test
             </button> */}
-            <Player />
+            {player?(<Player />):(<></>)}
 
         </div>
     )

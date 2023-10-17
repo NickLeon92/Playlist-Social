@@ -42,34 +42,69 @@ export const lambdaHandler = async (event:any)=> {
 
     await connectToDatabase(dbURI);
     // await mongoose.connect(dbURI)
-    const userData = await User.findOne({username: data.username})
+    // const userData = await User.findOne({username: data.username})
 
-    if(userData){
-      const userDataObject = userData.toObject();
-      if(!userDataObject.token_data){
-        throw userData
-      }
+    // if(userData){
+    //   const userDataObject = userData.toObject();
+    //   if(!userDataObject.token_data){
+    //     throw userData
+    //   }
     
 
-      const urlQuery = encodeURIComponent(eventData.search)
-      console.log('url query: ',urlQuery, '.')
-      try {
-        const spotifyRes = await axios({
-          method: 'get',
-          url: `https://api.spotify.com/v1/search?q=${urlQuery}&type=track`,
+    //   const urlQuery = encodeURIComponent(eventData.search)
+    //   console.log('url query: ',urlQuery, '.')
+    //   try {
+    //     const spotifyRes = await axios({
+    //       method: 'get',
+    //       url: `https://api.spotify.com/v1/search?q=${urlQuery}&type=track`,
+    //       headers: {
+    //         "Authorization": `Bearer ${userDataObject.token_data.access_token}`
+    //       }
+    //     })
+    
+    //     console.log(spotifyRes.data)
+    //     payload = spotifyRes.data
+    //   } catch (error) {
+    //     throw error
+    //   }
+    // }else{
+    //   throw 'uhhh how did you do that..?'
+    // }
+//-----------------------------------
+
+  const requestData = new URLSearchParams({
+      grant_type: 'refresh_token',
+      refresh_token: eventData.refresh_token,
+  });
+  console.log(requestData)
+  const clientId = process.env.client_id || ''
+  const clientSecret = process.env.client_secret || ''
+  console.log(clientId, '  |  ' , clientSecret)
+  // Base64 encode the Client ID and Client Secret for the "Authorization" header
+  const authHeader = `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`;
+
+  // Make a POST request to exchange the authorization code for tokens
+  const spotifyRes = await axios.post(
+      'https://accounts.spotify.com/api/token',
+      requestData.toString(),
+      {
           headers: {
-            "Authorization": `Bearer ${userDataObject.token_data.access_token}`
-          }
-        })
-    
-        console.log(spotifyRes.data)
-        payload = spotifyRes.data
-      } catch (error) {
-        throw error
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: authHeader,
+          },
       }
-    }else{
-      throw 'uhhh how did you do that..?'
-    }
+  );
+  console.log(spotifyRes.data)
+
+
+  const futureTimeStamp = new Date((new Date()).setMinutes((new Date()).getMinutes() + 50))
+  const res = await User.updateOne(
+    { username: eventData.username },
+    { $set: { 'token_data.access_token': spotifyRes.data.access_token, 'token_data.expTime': futureTimeStamp } }, // Update fields
+    { strict: false }
+  )
+
+  payload = {access_token : spotifyRes.data.access_token , expTime: futureTimeStamp}
 
     return {
       statusCode: 200,

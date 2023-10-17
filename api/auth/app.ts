@@ -56,11 +56,11 @@ export const lambdaHandler = async (event: any) => {
         await connectToDatabase(dbURI)
 
         const usernameToUpdate = incomingData.username; // Replace with the username you want to update
-      
-
+        const futureTimeStamp = new Date((new Date()).setMinutes((new Date()).getMinutes() + 50))
+        const payload ={...spotifyRes.data, expTime: futureTimeStamp}
         const res = await User.updateOne(
             { username: usernameToUpdate },
-            { $set: { 'token_data': spotifyRes.data } }, // Update fields
+            { $set: { 'token_data': payload } }, // Update fields
             { strict: false }
         )
     

@@ -1,8 +1,13 @@
 import { useState, useEffect, useRef } from "react"
-import {useAuthHeader} from 'react-auth-kit'
+// import {useAuthHeader} from 'react-auth-kit'
 import SongCard from "./SongCard"
 import axios from "axios"
 import { Song } from "../redux/slices/playlistsSlice"
+import { useSelector , useDispatch } from 'react-redux';
+import { RootState } from '../redux/store';
+import { useAuthHeader } from "react-auth-kit";
+import { useAuthUser } from 'react-auth-kit'
+import { setToken , setExpiration } from "../redux/slices/tokenSlice";
 
 interface EditorProps {
     playlist: Array<Song>
@@ -12,7 +17,14 @@ interface EditorProps {
 const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
 
     const authHeader = useAuthHeader()
+    const auth = useAuthUser()
+    const dispatch = useDispatch()
 
+    console.log(useSelector((state: RootState) => state.token))
+
+    const accessToken = useSelector((state: RootState) => state.token).token.access_token
+    const refreshToken = useSelector((state: RootState) => state.token).token.refresh_token
+    const expirationTime = useSelector((state: RootState) => state.token).token.expTime
     const [search, setSearch] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
@@ -44,21 +56,56 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
         }
     }
 
+    async function getAccessToken(){
+        console.log(accessToken)
+        console.log(refreshToken)
+        console.log(expirationTime)
+        const currentTime = new Date()
+        console.log(currentTime)
+        if( currentTime.getTime() > (new Date(expirationTime)).getTime() ){
+            console.log('old token detected')
+            try {
+                const apiRes = await axios({
+                    method: 'post',
+                    url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/spotify',
+                    data: {
+                        refresh_token: refreshToken,
+                        username: auth()?.username
+                    },
+                    headers:{
+                        "Authorization": authHeader(),
+                        "content-type": "application/json"
+                    }
+                }) 
+                console.log(apiRes.data)
+                dispatch(setToken(apiRes.data.access_token))
+                dispatch(setExpiration(apiRes.data.expTime))
+                return apiRes.data.access_token
+            } catch (error) {
+                console.log(error)
+                return accessToken
+            }
+        }
+        console.log('token still fresh')
+        return accessToken
+    }
+
     async function querySpotify(){
         console.log('querying spotify for this track: ', search)
-
+        const currentToken = await getAccessToken()
+        console.log(currentToken)
         try {
             setError(false)
             setLoading(true)
+            const urlQuery = encodeURIComponent(search)
+            console.log('url query: ',urlQuery, '.')
             const spotifyRes = await axios({
-                method: 'POST',
-                url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/spotify',
-                data: { search },
+                method: 'get',
+                url: `https://api.spotify.com/v1/search?q=${urlQuery}&type=track`,
                 headers: {
-                    "Authorization": authHeader(),
-                    "content-type": "application/json"
+                  "Authorization": `Bearer ${currentToken}`
                 }
-            })
+              })
             console.log(spotifyRes.data)
             const reducedData = spotifyRes.data.tracks.items.map((song:any) => {
 
