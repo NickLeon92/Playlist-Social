@@ -21,7 +21,7 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
     const auth = useAuthUser()
     const dispatch = useDispatch()
 
-    console.log(useSelector((state: RootState) => state.token))
+    // console.log(useSelector((state: RootState) => state.token))
 
     const accessToken = useSelector((state: RootState) => state.token).token.access_token
     const refreshToken = useSelector((state: RootState) => state.token).token.refresh_token

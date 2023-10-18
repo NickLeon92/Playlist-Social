@@ -46,15 +46,16 @@ export default function Player(){
         // <div>
         //     Player
         // </div>
-
-        <SpotifyPlayer
-            token={accessToken}
-            showSaveIcon
-            callback={state => {
-            if (!state.isPlaying) setPlay(false)
-            }}
-            play={play}
-            uris={trackUri ? [trackUri] : []}
-        />
+<div className='mt-2'>
+    <SpotifyPlayer
+        token={accessToken}
+        showSaveIcon
+        callback={state => {
+        if (!state.isPlaying) setPlay(false)
+        }}
+        play={play}
+        uris={trackUri ? [trackUri] : []}
+    />
+</div>
     )
 }
