@@ -1,7 +1,8 @@
 import React, { useEffect , useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch , useSelector } from 'react-redux';
 import { setTrack } from '../redux/slices/trackSlice';
 import { Song } from '../redux/slices/playlistsSlice';
+import { RootState } from '../redux/store';
 
 // interface Song {
 //     id: string,
@@ -22,6 +23,7 @@ interface SongCardProps {
 const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  setPlaylist }) => {
 
     const [inPlayist, setInPlaylist] = useState(false)
+    const track = useSelector((state: RootState) => state.track).track
     const dispatch = useDispatch()
 
     function addSong(){
@@ -63,7 +65,7 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
         }
 
     },[playlist,searchResults])
-
+    const className = `${track === song.songId?('bg-blue-800'):('bg-emerald-500')} text-white font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150`
     return (
 
         <div className="max-w-sm w-full lg:max-w-full lg:flex-wrap mb-2">
@@ -111,8 +113,9 @@ const SongCard: React.FC<SongCardProps> = ({ song , playlist , searchResults,  s
                         )}
                         <button
                             onClick={playSong}
-                            className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-3 ease-linear transition-all duration-150">
-                            play
+                            className={className}
+                            >
+                            {track === song.songId? ('playing..'):('play')}
                         </button>
                         
                     </div>
