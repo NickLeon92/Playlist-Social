@@ -62,7 +62,7 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
         const refreshData =  await setCurrentAccessToken( auth()?.username, authHeader(), accessToken, refreshToken, expirationTime )
         console.log(refreshData)
         dispatch(setToken(refreshData.accessToken))
-        dispatch(setExpiration(refreshData.expTime))
+        dispatch(setExpiration(refreshData.expirationTime))
 
         try {
             setError(false)

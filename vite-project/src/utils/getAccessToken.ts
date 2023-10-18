@@ -21,7 +21,7 @@ export async function setCurrentAccessToken(username: string, authHeader: string
                     }
                 }) 
                 console.log(apiRes.data)
-                return {accessToken: apiRes.data.access_token, expTime: apiRes.data.expTime}
+                return {accessToken: apiRes.data.access_token, expirationTime: apiRes.data.expTime}
             } catch (error) {
                 console.log(error)
                 return {accessToken, expirationTime}

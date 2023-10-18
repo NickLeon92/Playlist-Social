@@ -34,7 +34,7 @@ export default function Player(){
             const refreshData =  await setCurrentAccessToken( auth()?.username, authHeader(), accessToken, refreshToken, expirationTime )
             console.log(refreshData)
             dispatch(setToken(refreshData.accessToken))
-            dispatch(setExpiration(refreshData.expTime))
+            dispatch(setExpiration(refreshData.expirationTime))
             setPlay(true)
         }
     },[track])
