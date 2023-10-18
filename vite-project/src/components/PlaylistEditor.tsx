@@ -8,6 +8,7 @@ import { RootState } from '../redux/store';
 import { useAuthHeader } from "react-auth-kit";
 import { useAuthUser } from 'react-auth-kit'
 import { setToken , setExpiration } from "../redux/slices/tokenSlice";
+import {setCurrentAccessToken} from '../utils/getAccessToken'
 
 interface EditorProps {
     playlist: Array<Song>
@@ -56,44 +57,13 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
         }
     }
 
-    async function getAccessToken(){
-        console.log(accessToken)
-        console.log(refreshToken)
-        console.log(expirationTime)
-        const currentTime = new Date()
-        console.log(currentTime)
-        if( currentTime.getTime() > (new Date(expirationTime)).getTime() ){
-            console.log('old token detected')
-            try {
-                const apiRes = await axios({
-                    method: 'post',
-                    url: 'https://7kwip1fwr8.execute-api.us-east-1.amazonaws.com/Prod/spotify',
-                    data: {
-                        refresh_token: refreshToken,
-                        username: auth()?.username
-                    },
-                    headers:{
-                        "Authorization": authHeader(),
-                        "content-type": "application/json"
-                    }
-                }) 
-                console.log(apiRes.data)
-                dispatch(setToken(apiRes.data.access_token))
-                dispatch(setExpiration(apiRes.data.expTime))
-                return apiRes.data.access_token
-            } catch (error) {
-                console.log(error)
-                return accessToken
-            }
-        }
-        console.log('token still fresh')
-        return accessToken
-    }
-
     async function querySpotify(){
         console.log('querying spotify for this track: ', search)
-        const currentToken = await getAccessToken()
-        console.log(currentToken)
+        const refreshData =  await setCurrentAccessToken( auth()?.username, authHeader(), accessToken, refreshToken, expirationTime )
+        console.log(refreshData)
+        dispatch(setToken(refreshData.accessToken))
+        dispatch(setExpiration(refreshData.expTime))
+
         try {
             setError(false)
             setLoading(true)
@@ -103,7 +73,7 @@ const Editor: React.FC<EditorProps> = ({ playlist , setPlaylist }) => {
                 method: 'get',
                 url: `https://api.spotify.com/v1/search?q=${urlQuery}&type=track`,
                 headers: {
-                  "Authorization": `Bearer ${currentToken}`
+                  "Authorization": `Bearer ${refreshData.accessToken}`
                 }
               })
             console.log(spotifyRes.data)
