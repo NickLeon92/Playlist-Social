@@ -1,6 +1,6 @@
 // import React, { useEffect , useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setTrack } from '../redux/slices/trackSlice';
+import { setTrack , setCurrentPlaylist } from '../redux/slices/trackSlice';
 import { Song } from '../redux/slices/playlistsSlice';
 
 
@@ -11,7 +11,7 @@ interface ExplorerSongCardProps {
 
 }
 
-const ExplorerSongCard: React.FC<ExplorerSongCardProps> = ({ song }) => {
+const ExplorerSongCard: React.FC<ExplorerSongCardProps> = ({ song , playlist }) => {
 
     const dispatch = useDispatch()
 
@@ -19,6 +19,7 @@ const ExplorerSongCard: React.FC<ExplorerSongCardProps> = ({ song }) => {
     function playSong(){
         console.log(song.songId)
         dispatch(setTrack(song.songId))
+        dispatch(setCurrentPlaylist(playlist))
     }
 
     return (

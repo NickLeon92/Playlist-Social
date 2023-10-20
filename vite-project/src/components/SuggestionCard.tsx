@@ -1,6 +1,6 @@
 import React, { useEffect , useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setTrack } from '../redux/slices/trackSlice';
+import { setTrack , setCurrentPlaylist } from '../redux/slices/trackSlice';
 import { Song } from '../redux/slices/playlistsSlice';
 
 // interface Song {
@@ -41,6 +41,7 @@ const SuggestionCard: React.FC<SongCardProps> = ({ song , playlist , suggestions
     function playSong(){
         console.log(song.songId)
         dispatch(setTrack(song.songId))
+        dispatch(setCurrentPlaylist(playlist))
     }
 
     useEffect(() => {
