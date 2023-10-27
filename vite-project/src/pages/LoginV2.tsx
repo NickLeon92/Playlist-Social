@@ -3,7 +3,7 @@ import { useSignIn } from 'react-auth-kit'
 import { useIsAuthenticated } from 'react-auth-kit'
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
-
+import linkdin from '../assets/linkdin-icon.png'
 export default function LoginV2() {
 
     const isAuthenticated = useIsAuthenticated()
@@ -111,8 +111,8 @@ export default function LoginV2() {
                             </h1>
                             {error?(<p className="text-red-500">Error: {errorMessage}</p>):(<></>)}
                             <div>
-                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Username</label>
-                                <input onChange={updateUsername} value={username} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="yung goober" />
+                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                                <input onChange={updateUsername} value={username} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="enter your username :)" />
                             </div>
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
@@ -170,6 +170,11 @@ export default function LoginV2() {
                             </div>
                         </div>
                     </div>
+                <p>**note from the developer (me..Nick Leon) - I'm still waiting for Spotify to approve this app for any user to be able to authorize it to access their Spotify..</p>
+                <p>If you'd like to demo all of this app's functionality, feel free to login with my testing account: username = "test" ; password = "test"</p>
+                <p>Otherwise you can send me the email associated with your spotify account and I can manually onboard you to this app's approved users.</p>
+                <p>Feel free to message me on linkedin (below) or email me at nicolas7@vt.edu</p>
+                <a href="https://www.linkedin.com/in/nick-leon-5b338aa3/"><img src={linkdin} alt="" className="w-10"/></a>
                 </div>
             </section>
         )
