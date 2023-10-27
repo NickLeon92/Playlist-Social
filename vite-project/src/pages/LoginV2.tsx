@@ -170,10 +170,11 @@ export default function LoginV2() {
                             </div>
                         </div>
                     </div>
-                <p>**note from the developer (me..Nick Leon) - I'm still waiting for Spotify to approve this app for any user to be able to authorize it to access their Spotify..</p>
-                <p>If you'd like to demo all of this app's functionality, feel free to login with my testing account: username = "test" ; password = "test"</p>
-                <p>Otherwise you can send me the email associated with your spotify account and I can manually onboard you to this app's approved users.</p>
-                <p>Feel free to message me on linkedin (below) or email me at nicolas7@vt.edu</p>
+                    <br />
+                <p className="text-gray-400">**note from the developer (me..Nick Leon) - I'm still waiting for Spotify to approve this app for any user to be able to authorize it to access their Spotify..</p>
+                <p className="text-gray-400">If you'd like to demo all of this app's functionality, feel free to login with my testing account: username = "test" ; password = "test"</p>
+                <p className="text-gray-400">Otherwise you can send me the email associated with your spotify account and I can manually onboard you to this app's approved users.</p>
+                <p className="text-gray-400">Feel free to message me on linkedin (below) or email me at nicolas7@vt.edu</p>
                 <a href="https://www.linkedin.com/in/nick-leon-5b338aa3/"><img src={linkdin} alt="" className="w-10"/></a>
                 </div>
             </section>
