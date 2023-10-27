@@ -34,41 +34,58 @@ export const lambdaHandler = async (event:any)=> {
 
   await connectToDatabase(dbURI)
 
-  const mongodbRes = await User.find({username: userData.username})
+  const mongodbRes = await User.find({username: userData.user.username})
 
   const payload = {
-    username: userData.username
+    username: userData.user.username
   }
 
   const token = jwt.sign(payload, secretKey, {expiresIn: '24h'})
 
   if(mongodbRes.length === 0){
-    const newUser = new User(userData)
-    await newUser.save()
-    // res.send({message: "welcome new user" , token})
-    return{
-      statusCode: 200,
-      body: JSON.stringify({message: "welcome new user" , token, user: {username: userData.username}}),
-      headers: headers
+    if(userData.newUser){
+      const newUser = new User(userData.user)
+      await newUser.save()
+      // res.send({message: "welcome new user" , token})
+      return{
+        statusCode: 200,
+        body: JSON.stringify({message: "welcome new user" , token, user: {username: userData.user.username}}),
+        headers: headers
+      }
     }
-  }else if(userData.password === mongodbRes[0].password){
-    
-    // res.send({message: "welcome back" , token})
-    const obj: { password?: string } = mongodbRes[0]
-
-    delete obj.password
-    
-    return{
-      statusCode: 200,
-      body: JSON.stringify({message: "welcome back" , token, user: mongodbRes[0]}),
-      headers: headers
+    else{
+      return{
+        statusCode: 200,
+        body: JSON.stringify({message: "user not found.." , token: null, user: null}),
+        headers: headers
+      }
     }
   }else{
-    // res.send({message: 'incorrect password', token: null})
-    return{
-      statusCode: 200,
-      body: JSON.stringify({message: "incorrect password" , token: null, user: null}),
-      headers: headers
+      if(userData.newUser){
+        return{
+          statusCode: 200,
+          body: JSON.stringify({message: "user already exists.." , token: null, user: null}),
+          headers: headers
+        }
+      }else if(userData.user.password === mongodbRes[0].password){
+      
+        // res.send({message: "welcome back" , token})
+        const obj: { password?: string } = mongodbRes[0]
+
+        delete obj.password
+        
+        return{
+          statusCode: 200,
+          body: JSON.stringify({message: "welcome back" , token, user: mongodbRes[0]}),
+          headers: headers
+        }
+    }else{
+      // res.send({message: 'incorrect password', token: null})
+      return{
+        statusCode: 200,
+        body: JSON.stringify({message: "incorrect password" , token: null, user: null}),
+        headers: headers
+      }
     }
   }
   
